@@ -1,0 +1,113 @@
+html, body {
+  width: auto;
+  font-family: "arial";
+  background-color: #ffffff;
+  font-size: 10pt;
+  min-width: 150px;
+}
+
+.button {
+  margin: 3% auto;
+  padding: 2px;
+  text-align: center;
+  font-size: 10pt;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+}
+
+.button:focus{
+  border: 1px solid #000000;
+}
+
+.nowbtn{
+margin-bottom: 3px;
+width: 100%;
+text-align: right;
+}
+
+.addToIgn{
+margin-bottom: 10px;
+width: 100%;
+text-align: right;
+}
+
+.switch{
+margin-top: 8px;
+width: 100%;
+text-align: right;
+}
+
+.btn{
+border: 1px solid #e6e6e6;
+background-color: #31B0D5;
+color: #ffffff;
+padding: 3px 5px 3px 5px;
+border-radius: 4px;
+margin: 0px 0px 0px 0px;
+}
+
+.btn:active{
+border-color: #888888;
+}
+
+#tgl{
+display: none;
+}
+
+#tgl:checked+.btn{
+background-color: #31B0D5;
+color: #ffffff;
+}
+
+#tgl:checked+.btn::before{
+content: "auto prune";
+}
+
+#tgl+.btn{
+background-color: white;
+color: black;
+}
+
+#tgl+.btn::before{
+content: "manual prune";
+}
+
+a{
+font-size: 8pt;
+text-decoration: none;
+}
+
+.about{
+margin-top: 8px;
+width: 100%;
+text-align: right;
+}
+
+.notify{
+border: 1px solid #FFA4B2;
+border-radius: 3px;
+background-color: #FFD2D9;
+padding: 4px 4px 4px 4px;
+color: #FF3B5A;
+text-align: center;
+margin-bottom: 4px;
+opacity: 0;
+height: auto;
+max-height: 0px;
+margin-bottom: 0px;
+}
+
+#fadeOut{
+animation:opac 5s;
+opacity: 0;
+height: auto;
+max-height: 0px;
+margin-bottom: 0px;
+}
+
+@keyframes opac{
+0%{opacity:1; max-height: 200px; margin-bottom: 4px;}
+99%{opacity:0; max-height: 200px; margin-bottom: 4px;}
+100%{max-height: 0px; margin-bottom: 0px;}
+}
+

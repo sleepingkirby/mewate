@@ -1,0 +1,32 @@
+{
+
+  "manifest_version": 2,
+  "name": "pollTags",
+  "version": "1.7",
+  "description": "Gets stuff from HTML as string",
+  "permissions": [
+    "storage",
+    "declarativeContent",
+    "activeTab",
+    "tabs"
+  ],
+  "icons": {
+    "96": "icons/icon-96.png"
+  },
+  "page_action": {
+    "default_icon": "icons/icon-96.png",
+    "default_title": "Wrangling polltags?",
+    "default_popup": "popup/menu.html"
+  },
+  "options_page": "options/settings.html",
+  "background": {
+    "scripts": ["./background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./content_scripts/pollTags.js"]
+    }
+  ]
+}
