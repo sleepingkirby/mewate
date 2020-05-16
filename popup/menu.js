@@ -84,17 +84,38 @@ function startListen(){
 }
 
 
-  //set the checkbox from the config
+  //get values to set defaults
   chrome.storage.local.get( null,(item) => {
     //set default
-    if(!item.hasOwnProperty('patt')){
-    console.log('mewate: default pattern doesn\'t exist. Setting one of nothing.');
-    chrome.storage.local.set({'patt': ''});                         
-    }
-  
+      if(!item.hasOwnProperty('patt')){
+      console.log('mewate: pattern doesn\'t exist. Setting one of nothing.');
+      chrome.storage.local.set({'patt': ''});
+      item.patt="https?://[a-zA-Z0-9._/\-]+?.m3u8";
+      }
+
+      if(!item.hasOwnProperty('autoChck')){
+      console.log('mewate: auto check checkbox . Setting to false.');
+      chrome.storage.local.set({'autoChck': false});
+      item.autoChck=false; 
+      }
+
+ 
+      if(!item.hasOwnProperty('list')){
+      item['list']='';
+      }
+     
+    document.getElementById('autoChck').checked=item.autoChck;
     document.getElementById('pattInput').value=item.patt;
     document.getElementById('listTxtAr').value=item.list;
   });
+
+  //saving checkbox everytime it's checked
+  document.getElementById('autoChck').onclick=function(){
+  var chck=this.checked;
+    chrome.storage.local.set({'autoChck':chck}, function(){
+    notifyMsg("auto purge list and auto pull is set to: "+chck);
+    });
+  }
 
 
   //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
@@ -106,6 +127,18 @@ function startListen(){
     }
   });
 
+
+  document.addEventListener('DOMContentLoaded', function () {
+    chrome.storage.local.get( 'autoChck' ,(item) => {
+      if(item.hasOwnProperty('autoChck') && item.autoChck){
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'}, function(){
+          notifyMsg("auto purge list and auto pull executed");
+          });
+        });
+      }
+    });
+  });
 
 chrome.tabs.executeScript({
 file: "/content_scripts/mewate.js"
