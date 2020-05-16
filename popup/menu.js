@@ -45,7 +45,7 @@ function startListen(){
         //send message to content_scripts
         //const gettingActiveTab = browser.tabs.query({active: true, currentWindow: true});
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
+          chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
         });
       break;
       case 'saveBtn':
@@ -61,7 +61,7 @@ function startListen(){
       break;
       case 'clearBtn':
         chrome.storage.local.set({'list': ''}, ()=>{
-        document.getElementById('listTxtAr').value='';
+        //document.getElementById('listTxtAr').value='';
         notifyMsg('Found list cleared'); 
         });
       break;
@@ -92,8 +92,20 @@ function startListen(){
     chrome.storage.local.set({'patt': ''});                         
     }
   
-    document.getElementById('listTxtAr').textContent=item.list;
+    document.getElementById('pattInput').value=item.patt;
+    document.getElementById('listTxtAr').value=item.list;
   });
+
+
+  //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
+  //this makes the text area update when there's a new value
+  chrome.storage.onChanged.addListener(function(changes,namespace){
+  console.log(changes);
+    if(changes.hasOwnProperty('list') && changes.list.hasOwnProperty('newValue')){
+    document.getElementById('listTxtAr').value=changes.list.newValue;
+    }
+  });
+
 
 chrome.tabs.executeScript({
 file: "/content_scripts/mewate.js"

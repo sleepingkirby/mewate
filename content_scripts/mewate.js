@@ -47,13 +47,23 @@
   ---------------------*/
   function runOnMsg(request, sender, sendResponse){
     switch(request.action){
-      case 'grab':
-        console.log('mewate: manual pull request');
-
+      case 'pullPatt':
         chrome.storage.local.get(null, (item) => {
+        console.log('mewate: pull results with pattern '+item.patt);
         var lns=grepHTML(item.patt);
-          chrome.storage.local.set({list:lns});
+          if(lns && lns!=''){
+          lns=item.list+lns;
+            chrome.storage.local.set({list:lns},() => { 
+            console.log('mewate: results found.');
+            
+            sendResponse({'list':lns});
+            });
+          }
+          else{
+          console.log('mewate: no results found.');  
+          }
         });
+        sendResponse({'pullPatt':'set done?'});
       break;
       default:
       break;
@@ -74,44 +84,13 @@
     var regexPatt = new RegExp(patt, "ig");
     var strings=html.match(regexPatt);
     var lns='';
-    var nl='';
       for(let ln of strings){
-      lns=lns+nl+ln;
-      nl='\n';
+      lns=lns+ln+'\n';
       }
+  
   return lns;
   }
 
-/*
-  //runs at the start of every page
-  chrome.storage.local.get(null, (item) => {
-
-    //set default
-    if(!item.hasOwnProperty('mnl')){
-    console.log('pollTags: manual setting doesn\'t exist. Setting default value.');
-    item={mnl: true};
-    chrome.storage.local.set({mnl: true}); 
-    }
-
-    if(!item.hasOwnProperty('patt')){
-    item['patt']='';    
-    }
-
-    //start if the mnl is false
-    if(item['mnl'] === false){
-      document.addEventListener('readystatechange', event => {
-        if (event.target.readyState === 'complete') {
-        console.log("pollTags: poll the tags " + document.readyState);
-        var lns=grepHTML(item['patt']);
-        }
-      });
-    }
-
-  });
-*/
-
-
-console.log("asdfasdfasdf");-
 
   chrome.runtime.onMessage.addListener(runOnMsg);
 })();

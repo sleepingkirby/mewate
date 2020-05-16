@@ -17,7 +17,6 @@
     "default_title": "mewate",
     "default_popup": "popup/menu.html"
   },
-  "options_page": "options/settings.html",
   "background": {
     "scripts": ["./background.js"],
     "persistent": false
