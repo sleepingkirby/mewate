@@ -48,7 +48,7 @@
   function runOnMsg(request, sender, sendResponse){
     switch(request.action){
       case 'grab':
-        console.log('pollTags: manual pull request');
+        console.log('mewate: manual pull request');
 
         chrome.storage.local.get(null, (item) => {
         var lns=grepHTML(item.patt);
@@ -79,10 +79,10 @@
       lns=lns+nl+ln;
       nl='\n';
       }
-    });
   return lns;
   }
 
+/*
   //runs at the start of every page
   chrome.storage.local.get(null, (item) => {
 
@@ -108,6 +108,10 @@
     }
 
   });
+*/
+
+
+console.log("asdfasdfasdf");-
 
   chrome.runtime.onMessage.addListener(runOnMsg);
 })();

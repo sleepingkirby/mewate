@@ -29,58 +29,52 @@ var rtrn=rtrn.substr(0,end);
 return rtrn;
 }
 
+function notifyMsg(msg){
+        var notif=document.getElementsByClassName('notify')[0];
+          notif.id=''; //resets the notification area animation
+          console.log('mewate: ' + msg);
+          notif.textContent=msg;
+          notif.id='fadeOut';
+          notif.addEventListener("animationend", ()=>{notif.id='';});
+}
+
 function startListen(){
   document.addEventListener("click", (e) => {
     switch(e.target.name){
-      case 'disableMdl':
+      case 'pullBtn':
         //send message to content_scripts
         //const gettingActiveTab = browser.tabs.query({active: true, currentWindow: true});
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, {action: 'disableMdl'});
+        chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
         });
       break;
-      case 'addToIgnList':
-        chrome.tabs.query({active: true, currentWindow: true},(tabs) => {
-        var url=tabs[0].url;
-        var host=hostFromURL(url);
-          chrome.storage.local.get('custList',(custList) => {
-          var newCL=custList.custList;
-          newCL[host]=null;
-            var notif=document.getElementsByClassName('notify')[0];
-            notif.id=''; //resets the notification area animation
-            chrome.storage.local.set({custList: newCL},()=>{
-            console.log('butWhyMod: added host to custom List ' + host);
-            notif.textContent='\'' + host + '\' added to white list.';
-            notif.id='fadeOut';
-            notif.addEventListener("animationend", ()=>{
-            notif.id='';
-            });
-            })
+      case 'saveBtn':
+        var inp = document.getElementById('pattInput').value;
+          if(inp=='' || !inp){
+          notifyMsg("Pattern not saved. No pattern to save.");
+          break;
+          }
+
+          chrome.storage.local.set({'patt': inp},()=>{
+          notifyMsg("Pattern '"+inp+"' saved."); 
           });
+      break;
+      case 'clearBtn':
+        chrome.storage.local.set({'list': ''}, ()=>{
+        document.getElementById('listTxtAr').value='';
+        notifyMsg('Found list cleared'); 
         });
-        //browser.storage.local.set({mnl: !e.target.checked}).then(()=>{console.log('butWhyMod: \'manual\' set to ' + !e.target.checked)}, onError);
       break;
-      case 'mnl':
-      /*
-        browser.storage.local.get('mnl').then((item) => {
-          if(item.hasOwnProperty('mnl')){
-            console.debug(e.target.checked);
-            console.debug(item['mnl']);
+      case 'saveLBtn':
+        var inp = document.getElementById('listTxtAr').value;
+          if(inp=='' || !inp){
+          notifyMsg("List not saved. Not list to save.");
+          break;
           }
-          else{
-            console.log('item is undefined');
-            browser.storage.local.set({mnl: e.target.checked});
-          }
-        }
-        , onError);
-      */
-         chrome.storage.local.set({mnl: !e.target.checked},()=>{console.log('butWhyMod: \'manual\' set to ' + !e.target.checked)});
-      break;
-      case 'settings':
-        chrome.runtime.openOptionsPage();
-      break;
-      case 'donate':
-        chrome.tabs.create({url: 'https://patreon.com/WKLaume'});
+
+          chrome.storage.local.set({'list': inp},()=>{
+          notifyMsg("List saved."); 
+          });
       break;
       default:
       break;
@@ -90,22 +84,19 @@ function startListen(){
 }
 
 
-
   //set the checkbox from the config
-  chrome.storage.local.get('mnl',(item) => {
+  chrome.storage.local.get( null,(item) => {
     //set default
-    if(!item.hasOwnProperty('mnl')){
-    console.log('butWhyMod: manual setting doesn\'t exist. Setting default value.');
-    item={mnl: false};
-    chrome.storage.local.set({mnl: false});                         
+    if(!item.hasOwnProperty('patt')){
+    console.log('mewate: default pattern doesn\'t exist. Setting one of nothing.');
+    chrome.storage.local.set({'patt': ''});                         
     }
-    //checked = mnl is false(auto), unchecked = mnl is true(manual)
-   document.getElementsByName('mnl')[0].checked = !item['mnl'];
+  
+    document.getElementById('listTxtAr').textContent=item.list;
   });
 
-
 chrome.tabs.executeScript({
-file: "/content_scripts/pollTags.js"
+file: "/content_scripts/mewate.js"
 }, startListen);
 
 //alert(document.getElementsByName('auto').length);

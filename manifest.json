@@ -1,8 +1,7 @@
 {
-
   "manifest_version": 2,
-  "name": "pollTags",
-  "version": "1.7",
+  "name": "mewate",
+  "version": "1.0",
   "description": "Gets stuff from HTML as string",
   "permissions": [
     "storage",
@@ -15,7 +14,7 @@
   },
   "page_action": {
     "default_icon": "icons/icon-96.png",
-    "default_title": "Wrangling polltags?",
+    "default_title": "mewate",
     "default_popup": "popup/menu.html"
   },
   "options_page": "options/settings.html",
@@ -26,7 +25,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["./content_scripts/pollTags.js"]
+      "js": ["./content_scripts/mewate.js"]
     }
   ]
 }

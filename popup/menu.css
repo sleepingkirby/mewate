@@ -1,10 +1,71 @@
 html, body {
   width: auto;
   font-family: "arial";
-  background-color: #ffffff;
+  background-color: #101010;
+  color: #808080;
   font-size: 10pt;
-  min-width: 150px;
+  min-width: 200px;
+  padding: 4px;
+  margin: 0px;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  min-height: 250px;
 }
+
+div{
+}
+
+input, textarea {
+  background-color: #101010;
+  color: #808080;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  margin: 2px;
+  max-width: 100vw;
+}
+
+input[type=text]{
+align-self: stretch;
+flex-grow: 2;
+}
+
+#pullBtn{
+  min-width: 50px;
+}
+
+.notify{
+margin: 0px;
+padding: 0px;
+}
+
+.patt{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.gap{
+display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+}
+.list{
+display: flex;
+align-items: stretch;
+flex-direction: row;
+flex-grow:2;
+}
+
+#listTxtAr{
+flex-grow:2;
+width:auto;
+max-width: 100vw;
+height: auto;
+}
+
 
 .button {
   margin: 3% auto;
@@ -21,18 +82,6 @@ html, body {
 
 .nowbtn{
 margin-bottom: 3px;
-width: 100%;
-text-align: right;
-}
-
-.addToIgn{
-margin-bottom: 10px;
-width: 100%;
-text-align: right;
-}
-
-.switch{
-margin-top: 8px;
 width: 100%;
 text-align: right;
 }
@@ -75,12 +124,6 @@ content: "manual prune";
 a{
 font-size: 8pt;
 text-decoration: none;
-}
-
-.about{
-margin-top: 8px;
-width: 100%;
-text-align: right;
 }
 
 .notify{

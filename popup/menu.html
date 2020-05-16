@@ -9,20 +9,23 @@
 <body>
   <div class="notify">
   </div>
-  <div class="autoMan">
-    <input type="submit" class="btn" name="inputAutoMan" value="manual">
-  </div>
+
   <div class="patt">
-    <input type="text" class="inputPatt" name="inputPatt" placeholder="pattern">
-  </div>
-  <div class="list">
-    <textarea>
-    </textarea>
+    <input type="text" name="pattInput" id="pattInput" placeholder="https://[a-zA-Z0-9_.\-]+?\.m3u8" />
+    <input class="save" type="submit" name="saveBtn" value="save" />
   </div>
 
-  <div class="about">
-  <a href="" name="settings">settings</a><br>
+  <div class="gap">
+    <input type="submit" id="pullBtn" name="pullBtn" value="V pull V" />
+    <input type="submit" id="clearBtn" name="clearBtn" value="V clear V" />
+    <input type="submit" id="saveLBtn" name="saveLBtn" value="V save V" />
   </div>
+
+  <div class="list">
+    <textarea id="listTxtAr" placeholder="results shows up here..." />
+  </div>
+
+
   <script src="menu.js"> </script>
 </body>
 
