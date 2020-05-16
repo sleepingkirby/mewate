@@ -148,8 +148,9 @@ function startListen(){
   document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.local.get( null ,(item) => {
       if(item.hasOwnProperty('autoCChck') && item.autoCChck){
-      document.getElementById('listTxtAr').value='';
-      notifyMsg("auto clear executed");
+        chrome.storage.local.set({'list':''} ,() => {
+        notifyMsg("auto clear executed");
+        });
       }
 
       if(item.hasOwnProperty('autoChck') && item.autoChck){
