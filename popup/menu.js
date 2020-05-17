@@ -148,6 +148,16 @@ function startListen(){
     });
   }
 
+  //copy the textarea tothe clipboard
+  document.getElementById('cpyBtn').onclick=function(){
+  var ta=document.getElementById('listTxtAr');
+  ta.focus();
+  ta.select();
+  notifyMsg('Copied to clipboard. '+document.execCommand('copy'));
+  }
+
+
+
 
   //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
   //this makes the text area update when there's a new value

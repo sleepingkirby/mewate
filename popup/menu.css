@@ -63,6 +63,10 @@ flex-direction: row;
 flex-grow:2;
 }
 
+.copy{
+justify-content: flex-end;
+}
+
 #listTxtAr{
 flex-grow:2;
 width:auto;
