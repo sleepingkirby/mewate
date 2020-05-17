@@ -84,7 +84,7 @@ function startListen(){
 }
 
 
-  //get values to set defaults
+  //variable checks
   chrome.storage.local.get( null,(item) => {
     //set default
       if(!item.hasOwnProperty('patt')){
@@ -105,14 +105,20 @@ function startListen(){
       item.autoCChck=false; 
       }
 
+      if(!item.hasOwnProperty('autoPgChck')){
+      console.log('mewate: auto clear checkbox . Setting to false.');
+      chrome.storage.local.set({'autoPgChck': false});
+      item.autoCChck=false; 
+      }
 
- 
+
       if(!item.hasOwnProperty('list')){
       item['list']='';
       }
      
     document.getElementById('autoChck').checked=item.autoChck;
     document.getElementById('autoCChck').checked=item.autoCChck;
+    document.getElementById('autoPgChck').checked=item.autoPgChck;
     document.getElementById('pattInput').value=item.patt;
     document.getElementById('listTxtAr').value=item.list;
   });
@@ -121,7 +127,7 @@ function startListen(){
   document.getElementById('autoChck').onclick=function(){
   var chck=this.checked;
     chrome.storage.local.set({'autoChck':chck}, function(){
-    notifyMsg("auto purge list and auto pull is set to: "+chck);
+    notifyMsg("auto pull is set to: "+chck);
     });
   }
 
@@ -129,10 +135,17 @@ function startListen(){
   document.getElementById('autoCChck').onclick=function(){
   var chck=this.checked;
     chrome.storage.local.set({'autoCChck':chck}, function(){
-    notifyMsg("auto purge list and auto pull is set to: "+chck);
+    notifyMsg("auto purge list is set to: "+chck);
     });
   }
 
+  //saving auto pull checkbox everytime it's checked
+  document.getElementById('autoPgChck').onclick=function(){
+  var chck=this.checked;
+    chrome.storage.local.set({'autoPgChck':chck}, function(){
+    notifyMsg("auto pull on page load is set to: "+chck);
+    });
+  }
 
 
   //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
@@ -143,6 +156,29 @@ function startListen(){
     document.getElementById('listTxtAr').value=changes.list.newValue;
     }
   });
+
+
+//rn on popup (menu) page load.
+  document.addEventListener('DOMContentLoaded', function () {
+    chrome.storage.local.get( null ,(item) => {
+      if(item.hasOwnProperty('autoPgChck') && !item.autoPgChck){
+        if(item.hasOwnProperty('autoCChck') && item.autoCChck){
+          chrome.storage.local.set({'list':''} ,() => {
+          notifyMsg("auto clear executed");
+          });
+        }
+
+        if(item.hasOwnProperty('autoChck') && item.autoChck){
+          chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'}, function(){
+            notifyMsg("auto pull executed");
+            });
+          });
+        }
+      }
+    });
+  }); 
+
 
 
 chrome.tabs.executeScript({

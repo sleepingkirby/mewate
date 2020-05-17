@@ -1,12 +1,12 @@
 html, body {
-  width: 516px;
-  height: 24px;
+  width: auto;
+  height: 240px;
   font-family: "arial";
   background-color: #101010;
   color: #808080;
   font-size: 10pt;
-  min-width: 200px;
-  padding: 4px;
+  min-width: 450px;
+  padding: 4px 4px 4px 4px;
   margin: 0px;
   display: flex;
   align-items: stretch;

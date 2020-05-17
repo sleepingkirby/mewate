@@ -83,6 +83,11 @@
     var html=document.documentElement.innerHTML;
     var regexPatt = new RegExp(patt, "ig");
     var strings=html.match(regexPatt);
+    //console.log("mewate: pattern fount matches");
+    //console.log(strings);
+      if( strings==null ||  !strings || strings.length<=0){
+      return false;
+      }
     var lns='';
       for(let ln of strings){
       lns=lns+ln+'\n';
@@ -95,13 +100,14 @@
 
     //auto pull 
     chrome.storage.local.get( null ,(item) => {
-      if(item.hasOwnProperty('autoCChck') && item.autoCChck){
-        chrome.storage.local.set({'list':''} ,() => {
-        console.log("mewate: auto purging list");
-        });
-      }
+      if(item.hasOwnProperty('autoPgChck') && item.autoPgChck){
+        if(item.hasOwnProperty('autoCChck') && item.autoCChck){
+          chrome.storage.local.set({'list':''} ,() => {
+          console.log("mewate: auto purging list");
+          });
+        }
 
-      if(item.hasOwnProperty('autoChck') && item.autoChck){
+        if(item.hasOwnProperty('autoChck') && item.autoChck){
         console.log('mewate: auto pulling results with pattern '+item.patt);
         var lns=grepHTML(item.patt);
           if(lns && lns!=''){
@@ -113,6 +119,7 @@
           else{
           console.log('mewate: auto pull found no results');  
           }
+        }
       }
     });
 
