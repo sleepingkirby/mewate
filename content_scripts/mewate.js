@@ -96,29 +96,34 @@
   return lns;
   }
 
-
+  function autoPull(item){
+    if(item.hasOwnProperty('autoChck') && item.autoChck){
+    console.log('mewate: auto pulling results with pattern '+item.patt);
+    var lns=grepHTML(item.patt);
+      if(lns && lns!=''){
+      lns=item.list+lns;
+        chrome.storage.local.set({list:lns},() => { 
+        console.log('mewate: auto pull found results');
+        });
+      }
+      else{
+      console.log('mewate: auto pull found no results');  
+      }
+    } 
+  }
 
     //auto pull 
     chrome.storage.local.get( null ,(item) => {
       if(item.hasOwnProperty('autoPgChck') && item.autoPgChck){
         if(item.hasOwnProperty('autoCChck') && item.autoCChck){
-          chrome.storage.local.set({'list':''} ,() => {
+          item.list='';
+          chrome.storage.local.set({'list':""} ,() => {
           console.log("mewate: auto purging list");
+          autoPull(item);
           });
-        }
-
-        if(item.hasOwnProperty('autoChck') && item.autoChck){
-        console.log('mewate: auto pulling results with pattern '+item.patt);
-        var lns=grepHTML(item.patt);
-          if(lns && lns!=''){
-          lns=item.list+lns;
-            chrome.storage.local.set({list:lns},() => { 
-            console.log('mewate: auto pull found results');
-            });
-          }
-          else{
-          console.log('mewate: auto pull found no results');  
-          }
+        }  
+        else{
+        autoPull(item);
         }
       }
     });

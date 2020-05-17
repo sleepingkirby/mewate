@@ -152,6 +152,7 @@ function startListen(){
   //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
   //this makes the text area update when there's a new value
   chrome.storage.onChanged.addListener(function(changes,namespace){
+  console.log("=====>>");
   console.log(changes);
     if(changes.hasOwnProperty('list') && changes.list.hasOwnProperty('newValue')){
     document.getElementById('listTxtAr').value=changes.list.newValue;
