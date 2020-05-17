@@ -90,7 +90,7 @@ function startListen(){
       if(!item.hasOwnProperty('patt')){
       console.log('mewate: pattern doesn\'t exist. Setting one of nothing.');
       chrome.storage.local.set({'patt': ''});
-      item.patt="https?://[a-zA-Z0-9._/\-]+?.m3u8";
+      item.patt="";
       }
 
       if(!item.hasOwnProperty('autoChck')){
@@ -113,6 +113,7 @@ function startListen(){
 
 
       if(!item.hasOwnProperty('list')){
+      chrome.storage.local.set({'list': ''});
       item['list']='';
       }
      
