@@ -145,24 +145,6 @@ function startListen(){
   });
 
 
-  document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get( null ,(item) => {
-      if(item.hasOwnProperty('autoCChck') && item.autoCChck){
-        chrome.storage.local.set({'list':''} ,() => {
-        notifyMsg("auto clear executed");
-        });
-      }
-
-      if(item.hasOwnProperty('autoChck') && item.autoChck){
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'}, function(){
-          notifyMsg("auto pull executed");
-          });
-        });
-      }
-    });
-  });
-
 chrome.tabs.executeScript({
 file: "/content_scripts/mewate.js"
 }, startListen);

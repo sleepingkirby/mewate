@@ -63,7 +63,7 @@
           console.log('mewate: no results found.');  
           }
         });
-        sendResponse({'pullPatt':'set done?'});
+        sendResponse({'pullPatt':'done'});
       break;
       default:
       break;
@@ -90,6 +90,31 @@
   
   return lns;
   }
+
+
+
+    //auto pull 
+    chrome.storage.local.get( null ,(item) => {
+      if(item.hasOwnProperty('autoCChck') && item.autoCChck){
+        chrome.storage.local.set({'list':''} ,() => {
+        console.log("mewate: auto purging list");
+        });
+      }
+
+      if(item.hasOwnProperty('autoChck') && item.autoChck){
+        console.log('mewate: auto pulling results with pattern '+item.patt);
+        var lns=grepHTML(item.patt);
+          if(lns && lns!=''){
+          lns=item.list+lns;
+            chrome.storage.local.set({list:lns},() => { 
+            console.log('mewate: auto pull found results');
+            });
+          }
+          else{
+          console.log('mewate: auto pull found no results');  
+          }
+      }
+    });
 
 
   chrome.runtime.onMessage.addListener(runOnMsg);
