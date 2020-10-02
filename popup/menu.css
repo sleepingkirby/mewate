@@ -48,14 +48,14 @@ padding: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
 }
 
 .gap{
 display: flex;
   flex-direction: row;
-  justify-content: space-between; 
+  justify-content: flex-start; 
 }
+
 .list{
 display: flex;
 align-items: stretch;
@@ -64,7 +64,9 @@ flex-grow:2;
 }
 
 .copy{
-justify-content: flex-end;
+display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
 }
 
 #listTxtAr{
@@ -115,19 +117,6 @@ display: none;
 #tgl:checked+.btn{
 background-color: #31B0D5;
 color: #ffffff;
-}
-
-#tgl:checked+.btn::before{
-content: "auto prune";
-}
-
-#tgl+.btn{
-background-color: white;
-color: black;
-}
-
-#tgl+.btn::before{
-content: "manual prune";
 }
 
 a{

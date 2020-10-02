@@ -59,6 +59,17 @@ function startListen(){
           notifyMsg("Pattern '"+inp+"' saved."); 
           });
       break;
+      case 'saveXHRBtn':
+        var inp = document.getElementById('XHRPattInput').value;
+          if(inp=='' || !inp){
+          notifyMsg("XHR pattern not saved. No pattern to save.");
+          break;
+          }
+
+          chrome.storage.local.set({'XHRPatt': inp},()=>{
+          notifyMsg("XHR pattern '"+inp+"' saved."); 
+          });
+      break;
       case 'clearBtn':
         chrome.storage.local.set({'list': ''}, ()=>{
         //document.getElementById('listTxtAr').value='';
@@ -88,8 +99,14 @@ function startListen(){
   chrome.storage.local.get( null,(item) => {
     //set default
       if(!item.hasOwnProperty('patt')){
-      console.log('mewate: pattern doesn\'t exist. Setting one of nothing.');
+      console.log('mewate: HTML pattern doesn\'t exist. Setting one of nothing.');
       chrome.storage.local.set({'patt': ''});
+      item.patt="";
+      }
+
+      if(!item.hasOwnProperty('XHRPatt')){
+      console.log('mewate: XHR pattern doesn\'t exist. Setting one of nothing.');
+      chrome.storage.local.set({'XHRPatt': ''});
       item.patt="";
       }
 
@@ -111,6 +128,12 @@ function startListen(){
       item.autoCChck=false; 
       }
 
+      if(!item.hasOwnProperty('XHRChck')){
+      console.log('mewate: XHR on checkbox . Setting to false.');
+      chrome.storage.local.set({'XHRChck': false});
+      item.XHRChck=false; 
+      }
+
 
       if(!item.hasOwnProperty('list')){
       chrome.storage.local.set({'list': ''});
@@ -120,7 +143,9 @@ function startListen(){
     document.getElementById('autoChck').checked=item.autoChck;
     document.getElementById('autoCChck').checked=item.autoCChck;
     document.getElementById('autoPgChck').checked=item.autoPgChck;
+    document.getElementById('XHRChck').checked=item.XHRChck;
     document.getElementById('pattInput').value=item.patt;
+    document.getElementById('XHRPattInput').value=item.XHRPatt;
     document.getElementById('listTxtAr').value=item.list;
   });
 
@@ -147,6 +172,15 @@ function startListen(){
     notifyMsg("auto pull on page load is set to: "+chck);
     });
   }
+
+  //saving auto pull checkbox everytime it's checked
+  document.getElementById('XHRChck').onclick=function(){
+  var chck=this.checked;
+    chrome.storage.local.set({'XHRChck':chck}, function(){
+    notifyMsg("Grab from XHR is set to: "+chck);
+    });
+  }
+
 
   //copy the textarea tothe clipboard
   document.getElementById('cpyBtn').onclick=function(){

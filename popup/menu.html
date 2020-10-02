@@ -18,15 +18,22 @@
     <input type="checkbox" name="autoPgChck" id="autoPgChck" />
     <span> auto grab on page load (instead of menu load)</span>
   </div>
+
   <div class="patt">
-    <input type="text" name="pattInput" id="pattInput" placeholder="some regex pattern here..." />
+    <input type="text" name="pattInput" id="pattInput" placeholder="some regex pattern here for HTML grab..." />
     <input class="save" type="submit" name="saveBtn" value="save" />
+  </div>
+
+  <div class="patt">
+    <input type="checkbox" name="XHRChck" id="XHRChck" />
+    <span> on </span>
+ 
+    <input type="text" name="XHRPattInput" id="XHRPattInput" placeholder="some url pattern here for XHR grab..." />
+    <input class="save" type="submit" name="saveXHRBtn" value="save" />
   </div>
 
   <div class="gap">
     <input type="submit" id="pullBtn" name="pullBtn" value="V pull V" />
-    <input type="submit" id="clearBtn" name="clearBtn" value="V clear V" />
-    <input type="submit" id="saveLBtn" name="saveLBtn" value="V save V" />
   </div>
 
   <div class="list">
@@ -34,6 +41,8 @@
   </div>
 
   <div class="copy">
+    <input type="submit" id="clearBtn" name="clearBtn" value="clear" />
+    <input type="submit" id="saveLBtn" name="saveLBtn" value="save" />
     <input type="submit" id="cpyBtn" name="cpyBtn" value="copy to clipboard" />
   </div>
 
