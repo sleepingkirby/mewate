@@ -15,7 +15,6 @@
   window.hasRun = true;
   window.hasModaled = false;
 
-  
 
   
   /*--------------------------
