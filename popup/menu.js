@@ -73,6 +73,7 @@ function startListen(){
       case 'clearBtn':
         chrome.storage.local.set({'list': ''}, ()=>{
         //document.getElementById('listTxtAr').value='';
+        chrome.runtime.sendMessage({bdgNm: ''});
         notifyMsg('Found list cleared'); 
         });
       break;
@@ -82,8 +83,8 @@ function startListen(){
           notifyMsg("List not saved. Not list to save.");
           break;
           }
-
           chrome.storage.local.set({'list': inp},()=>{
+          chrome.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
           notifyMsg("List saved."); 
           });
       break;
@@ -208,6 +209,7 @@ function startListen(){
       if(item.hasOwnProperty('autoPgChck') && !item.autoPgChck){
         if(item.hasOwnProperty('autoCChck') && item.autoCChck){
           chrome.storage.local.set({'list':''} ,() => {
+          chrome.runtime.sendMessage({bdgNm: ''});
           notifyMsg("auto clear executed");
           });
         }

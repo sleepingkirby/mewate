@@ -1,26 +1,13 @@
 'use strict';
 
-  function grepHTML(patt){
-    if(!patt){
-    return false;
-    }
+chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
 
-    var html=document.documentElement.innerHTML;
-    var regexPatt = new RegExp(patt, "ig");
-    var strings=html.match(regexPatt);
-    //console.log("mewate: pattern fount matches");
-    //console.log(strings);
-      if( strings==null ||  !strings || strings.length<=0){
-      return false;
-      }
-    var lns='';
-      for(let ln of strings){
-      lns=lns+ln+'\n';
-      }
-
-  return lns;
+//listener for contentScript
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+  if(msg.hasOwnProperty('bdgNm')) {
+    chrome.browserAction.setBadgeText({text: msg.bdgNm});
   }
-
+});
 
 
 //  chrome.webRequest.onBeforeRequest.addListener(callback, filter, opt_extraInfoSpec);  
@@ -51,13 +38,15 @@
               }
             //send results to storage.
             chrome.storage.local.set({'list': lns});
+            chrome.browserAction.setBadgeText({text: lns.trim().split(/\r\n|\r|\n/).length.toString()});
             }
           });
         },
         {urls: ["<all_urls>"]});
 
-chrome.runtime.onInstalled.addListener(function() {
 
+
+chrome.runtime.onInstalled.addListener(function() {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
       conditions: [new chrome.declarativeContent.PageStateMatcher({

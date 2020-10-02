@@ -55,7 +55,7 @@
           lns=item.list+lns;
             chrome.storage.local.set({list:lns},() => { 
             console.log('mewate: results found.');
-            
+            chrome.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
             sendResponse({'list':lns});
             });
           }
@@ -104,6 +104,7 @@
       lns=item.list+lns;
         chrome.storage.local.set({list:lns},() => { 
         console.log('mewate: auto pull found results');
+        chrome.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
         });
       }
       else{
