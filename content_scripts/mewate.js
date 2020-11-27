@@ -120,6 +120,7 @@
           item.list='';
           chrome.storage.local.set({'list':""} ,() => {
           console.log("mewate: auto purging list");
+          chrome.runtime.sendMessage({bdgNm: ""});
           autoPull(item);
           });
         }  
@@ -127,6 +128,19 @@
         autoPull(item);
         }
       }
+      /* a lot of pages these days change URL but not a change page.
+        I haven't decided if "auto clear" means "clear on find" or "clear
+        on new page" yet. Until then, this "clear on new page" is commented
+        out 
+      else{
+        if(item.hasOwnProperty('autoCChck') && item.autoCChck){
+          chrome.storage.local.set({'list':""} ,() => {
+          console.log("mewate: auto purging list");
+          chrome.runtime.sendMessage({bdgNm: ""});
+          });
+        }
+      }
+      */
     });
 
 

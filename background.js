@@ -21,6 +21,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
               console.log("XHR grab turned on, but no pattern provided. Quitting...");
               return false;
               }
+
     
             //starting grab
             console.log("mewate: Grabbing XMLHttpRequests with pattern :"+item.XHRPatt);
@@ -33,6 +34,20 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
                 
             //initializing result variable
             var lns=item.hasOwnProperty('list')?item.list:'';
+
+              /*if auto clear check is true, clear previous results
+               this introduces a "bug" in that the results textbox and the badge are 
+               not updated when this if statement runs but when the results are filled
+               so it's possible to never show no results and no badge if there's always
+               a xhr request that matches even though it's suppose to auto clear.
+               This is preferred compared to the alternative of running another callback
+               function to set the storage variable as they're a pain to maintain code-wise
+               as well as expensive resource-wise (by definition of a recursive function)
+              */
+              if(item.hasOwnProperty('autoCChck') && item.autoCChck){
+              lns='';
+              }
+            
               for(let ln of strings){
               lns=lns+ln+'\n';
               }
