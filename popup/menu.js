@@ -1,9 +1,3 @@
-/*
-function notify(str){
-console.log(str);
-alert(str);
-}
-*/
 
 function reportErr(error){
 console.error('pollTags: Failed to insert content script into tab/page: ' + error.message);
@@ -88,6 +82,9 @@ function startListen(){
           notifyMsg("List saved."); 
           });
       break;
+      case 'donate':
+        chrome.tabs.create({url: 'https://b3spage.sourceforge.io/index.html?mewate'});
+      break;
       default:
       break;
     }
@@ -101,13 +98,13 @@ function startListen(){
     //set default
       if(!item.hasOwnProperty('patt')){
       console.log('mewate: HTML pattern doesn\'t exist. Setting one of nothing.');
-      chrome.storage.local.set({'patt': ''});
+      chrome.storage.local.set({'patt': 'https?://.+\.(m3u8|mp4)'});
       item.patt="";
       }
 
       if(!item.hasOwnProperty('XHRPatt')){
       console.log('mewate: XHR pattern doesn\'t exist. Setting one of nothing.');
-      chrome.storage.local.set({'XHRPatt': ''});
+      chrome.storage.local.set({'XHRPatt': 'https?://.+\.(m3u8|mp4)'});
       item.patt="";
       }
 
@@ -202,7 +199,6 @@ function startListen(){
     }
   });
 
-
 //rn on popup (menu) page load.
   document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.local.get( null ,(item) => {
@@ -226,11 +222,8 @@ function startListen(){
   }); 
 
 
-
-chrome.tabs.executeScript({
-file: "/content_scripts/mewate.js"
-}, startListen);
-
-//alert(document.getElementsByName('auto').length);
-//document.getElementsByName('mnl')[0].checked=true;
-
+chrome.tabs.query({active: true, currentWindow: true},(tabs) => {
+  if(tabs[0].url.substr(0,6)!="chrome"){
+  chrome.tabs.executeScript({file: "/content_scripts/mewate.js"}, startListen);
+  }
+});
