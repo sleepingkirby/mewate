@@ -1,3 +1,3 @@
 #!/bin/bash
-rm releases/butWhyMod_chrome.zip
-zip -r releases/butWhyMod_chrome.zip background.js content_scripts/ icons manifest.json options/ popup/
+rm releases/mewate.zip
+zip -r releases/mewate.zip background.js content_scripts/ icons manifest.json popup/

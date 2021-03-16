@@ -99,13 +99,13 @@ function startListen(){
       if(!item.hasOwnProperty('patt')){
       console.log('mewate: HTML pattern doesn\'t exist. Setting one of nothing.');
       chrome.storage.local.set({'patt': 'https?://.+\.(m3u8|mp4)'});
-      item.patt="";
+      item.patt="https?://.+\.(m3u8|mp4)";
       }
 
       if(!item.hasOwnProperty('XHRPatt')){
       console.log('mewate: XHR pattern doesn\'t exist. Setting one of nothing.');
       chrome.storage.local.set({'XHRPatt': 'https?://.+\.(m3u8|mp4)'});
-      item.patt="";
+      item.XHRPatt="https?://.+\.(m3u8|mp4)";
       }
 
       if(!item.hasOwnProperty('autoChck')){
