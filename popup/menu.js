@@ -156,7 +156,7 @@ function startListen(){
 
     chrome.storage.local.set({'patt': inp},()=>{
     notifyMsg("Pattern '"+inp+"' saved.");
-    document.getElementById('pattSaveBtn').classList.remove("btnHL");
+    this.classList.remove("btnHL");
     });
   }
 
@@ -170,7 +170,7 @@ function startListen(){
 
     chrome.storage.local.set({'patt': inp},()=>{
     notifyMsg("XHR Pattern '"+inp+"' saved.");
-    document.getElementById('XHRPattSaveBtn').classList.remove("btnHL");
+    this.classList.remove("btnHL");
     });
   }
 
@@ -206,8 +206,15 @@ function startListen(){
       chrome.storage.local.set({'list': inp},()=>{
       chrome.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
       notifyMsg("List saved.");
+      this.classList.remove("btnHL");
       });
   }
+
+  //makes the save button for the text area get higlighted if the list is manually changed.
+  document.getElementById('listTxtAr').oninput=function(){
+  document.getElementById('saveLBtn').classList.add("btnHL");
+  }
+
 
 
 
