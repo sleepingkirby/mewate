@@ -114,6 +114,12 @@ margin: 0px 0px 0px 0px;
 border-color: #888888;
 }
 
+.btnHL{
+background-color: #31B0D5;
+color:#ffffff;
+border-color: #ffffff;
+}
+
 #tgl{
 display: none;
 }

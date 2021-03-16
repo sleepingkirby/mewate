@@ -42,49 +42,6 @@ function startListen(){
           chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
         });
       break;
-      case 'saveBtn':
-        var inp = document.getElementById('pattInput').value;
-          if(inp=='' || !inp){
-          notifyMsg("Pattern not saved. No pattern to save.");
-          break;
-          }
-
-          chrome.storage.local.set({'patt': inp},()=>{
-          notifyMsg("Pattern '"+inp+"' saved."); 
-          });
-      break;
-      case 'saveXHRBtn':
-        var inp = document.getElementById('XHRPattInput').value;
-          if(inp=='' || !inp){
-          notifyMsg("XHR pattern not saved. No pattern to save.");
-          break;
-          }
-
-          chrome.storage.local.set({'XHRPatt': inp},()=>{
-          notifyMsg("XHR pattern '"+inp+"' saved."); 
-          });
-      break;
-      case 'clearBtn':
-        chrome.storage.local.set({'list': ''}, ()=>{
-        //document.getElementById('listTxtAr').value='';
-        chrome.runtime.sendMessage({bdgNm: ''});
-        notifyMsg('Found list cleared'); 
-        });
-      break;
-      case 'saveLBtn':
-        var inp = document.getElementById('listTxtAr').value;
-          if(inp=='' || !inp){
-          notifyMsg("List not saved. Not list to save.");
-          break;
-          }
-          chrome.storage.local.set({'list': inp},()=>{
-          chrome.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
-          notifyMsg("List saved."); 
-          });
-      break;
-      case 'donate':
-        chrome.tabs.create({url: 'https://b3spage.sourceforge.io/index.html?mewate'});
-      break;
       default:
       break;
     }
@@ -179,8 +136,45 @@ function startListen(){
     });
   }
 
+  //setting listener so that patt and XHRPatt changes will highlight the save button
+  document.getElementById('pattInput').oninput=function(){
+  document.getElementById('pattSaveBtn').classList.add("btnHL");
+  }
 
-  //copy the textarea tothe clipboard
+  //setting listener so that patt and XHRPatt changes will highlight the save button
+  document.getElementById('XHRPattInput').oninput=function(){
+  document.getElementById('XHRPattSaveBtn').classList.add("btnHL");
+  }
+
+  //event to save save pattInput as well as remove the highlight from the button
+  document.getElementById('pattSaveBtn').onclick=function(){
+  var inp = document.getElementById('pattInput').value;
+    if(inp=='' || !inp){
+    notifyMsg("Pattern not saved. No pattern to save.");
+    return 0;
+    }
+
+    chrome.storage.local.set({'patt': inp},()=>{
+    notifyMsg("Pattern '"+inp+"' saved.");
+    document.getElementById('pattSaveBtn').classList.remove("btnHL");
+    });
+  }
+
+  //event to save save XHRPattInput as well as remove the highlight from the button
+  document.getElementById('XHRPattSaveBtn').onclick=function(){
+  var inp = document.getElementById('XHRPattInput').value;
+    if(inp=='' || !inp){
+    notifyMsg("XHR Pattern not saved. No pattern to save.");
+    return 0;
+    }
+
+    chrome.storage.local.set({'patt': inp},()=>{
+    notifyMsg("XHR Pattern '"+inp+"' saved.");
+    document.getElementById('XHRPattSaveBtn').classList.remove("btnHL");
+    });
+  }
+
+  //copy the textarea to the clipboard
   document.getElementById('cpyBtn').onclick=function(){
   var ta=document.getElementById('listTxtAr');
   ta.focus();
@@ -188,6 +182,32 @@ function startListen(){
   notifyMsg('Copied to clipboard. '+document.execCommand('copy'));
   }
 
+  //opens about page
+  document.getElementsByClassName("about")[0].onclick=function(){
+    chrome.tabs.create({url: 'https://b3spage.sourceforge.io/index.html?mewate'});
+  }
+
+  //clears the results list
+  document.getElementById('clearBtn').onclick=function(){
+    chrome.storage.local.set({'list': ''}, ()=>{
+    //document.getElementById('listTxtAr').value='';
+    chrome.runtime.sendMessage({bdgNm: ''});
+    notifyMsg('Results list cleared');
+    });
+  }
+
+  //saves the results list when manually modified
+  document.getElementById('saveLBtn').onclick=function(){
+    var inp = document.getElementById('listTxtAr').value;
+      if(inp=='' || !inp){
+      notifyMsg("List not saved. Not list to save.");
+      return 0;
+      }
+      chrome.storage.local.set({'list': inp},()=>{
+      chrome.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
+      notifyMsg("List saved.");
+      });
+  }
 
 
 
