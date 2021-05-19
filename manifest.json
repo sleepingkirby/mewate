@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "mewate",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Gets stuff from HTML as string",
   "permissions": [
     "storage",

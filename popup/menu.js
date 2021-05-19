@@ -168,7 +168,9 @@ function startListen(){
     return 0;
     }
 
-    chrome.storage.local.set({'patt': inp},()=>{
+    
+    chrome.storage.local.set({'XHRPatt': inp},()=>{
+   
     notifyMsg("XHR Pattern '"+inp+"' saved.");
     this.classList.remove("btnHL");
     });
