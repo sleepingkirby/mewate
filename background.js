@@ -13,6 +13,12 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 //  chrome.webRequest.onBeforeRequest.addListener(callback, filter, opt_extraInfoSpec);  
       chrome.webRequest.onBeforeRequest.addListener(
         function(details) {
+          /*so... according to google, prior to their documentation revamp, chrome.storage.local is synchronous and
+          therefore, we don't have to worry about race conditions. That's a big fat lie.
+          The below code will run the chrome.storage.local.set() (at line 67) *asynchronously* to the chrome.storage.local.get()
+          after this comment. This means that I'll have to figure/write my own task queue or task scheduler at some
+          point. For now, it's fine. But, seriously, WTH?
+          */
           chrome.storage.local.get( null ,(item) => {
             //check if should run
             if(item.hasOwnProperty('XHRChck') && item.XHRChck ){
@@ -47,12 +53,18 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
               if(item.hasOwnProperty('autoCChck') && item.autoCChck){
               lns='';
               }
-            
+              /*
+              console.log("=============================>>");
+              console.log(details.url);
+              console.log(strings);
+              console.log(item.list);
+              */
               for(let ln of strings){
               lns=lns+ln+'\n';
               }
+              //console.log("setting: "+lns);
             //send results to storage.
-            chrome.storage.local.set({'list': lns});
+            chrome.storage.local.set({'list': lns},(e)=>{console.log(details.url+": "+lns);});
             chrome.browserAction.setBadgeText({text: lns.trim().split(/\r\n|\r|\n/).length.toString()});
             }
           });
