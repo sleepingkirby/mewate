@@ -2,10 +2,15 @@
   "manifest_version": 2,
   "name": "mewate",
   "version": "1.2",
-  "description": "Gets stuff from HTML as string",
+  "description": "Finds/picks out string patterns in HTML and/or XHR requests",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "sleepingkirby@gmail.com-mewate",
+      "strict_min_version": "57.0"
+    }
+  },
   "permissions": [
     "storage",
-    "declarativeContent",
     "activeTab",
     "tabs",
     "webRequest",

@@ -38,8 +38,8 @@ function startListen(){
       case 'pullBtn':
         //send message to content_scripts
         //const gettingActiveTab = browser.tabs.query({active: true, currentWindow: true});
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-          chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
+        browser.tabs.query({active: true, currentWindow: true}, (tabs) => {
+          browser.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'});
         });
       break;
       default:
@@ -51,47 +51,47 @@ function startListen(){
 
 
   //variable checks
-  chrome.storage.local.get( null,(item) => {
+  browser.storage.local.get().then((item) => {
     //set default
       if(!item.hasOwnProperty('patt')){
       console.log('mewate: HTML pattern doesn\'t exist. Setting one of nothing.');
-      chrome.storage.local.set({'patt': 'https?://.+\.(m3u8|mp4)'});
+      browser.storage.local.set({'patt': 'https?://.+\.(m3u8|mp4)'});
       item.patt="https?://.+\.(m3u8|mp4)";
       }
 
       if(!item.hasOwnProperty('XHRPatt')){
       console.log('mewate: XHR pattern doesn\'t exist. Setting one of nothing.');
-      chrome.storage.local.set({'XHRPatt': 'https?://.+\.(m3u8|mp4)'});
+      browser.storage.local.set({'XHRPatt': 'https?://.+\.(m3u8|mp4)'});
       item.XHRPatt="https?://.+\.(m3u8|mp4)";
       }
 
       if(!item.hasOwnProperty('autoChck')){
       console.log('mewate: auto check checkbox . Setting to false.');
-      chrome.storage.local.set({'autoChck': false});
+      browser.storage.local.set({'autoChck': false});
       item.autoChck=false; 
       }
 
       if(!item.hasOwnProperty('autoCChck')){
       console.log('mewate: auto clear checkbox . Setting to false.');
-      chrome.storage.local.set({'autoCChck': false});
+      browser.storage.local.set({'autoCChck': false});
       item.autoCChck=false; 
       }
 
       if(!item.hasOwnProperty('autoPgChck')){
       console.log('mewate: auto clear checkbox . Setting to false.');
-      chrome.storage.local.set({'autoPgChck': false});
+      browser.storage.local.set({'autoPgChck': false});
       item.autoCChck=false; 
       }
 
       if(!item.hasOwnProperty('XHRChck')){
       console.log('mewate: XHR on checkbox . Setting to false.');
-      chrome.storage.local.set({'XHRChck': false});
+      browser.storage.local.set({'XHRChck': false});
       item.XHRChck=false; 
       }
 
 
       if(!item.hasOwnProperty('list')){
-      chrome.storage.local.set({'list': ''});
+      browser.storage.local.set({'list': ''});
       item['list']='';
       }
      
@@ -107,7 +107,7 @@ function startListen(){
   //saving auto pull checkbox everytime it's checked
   document.getElementById('autoChck').onclick=function(){
   var chck=this.checked;
-    chrome.storage.local.set({'autoChck':chck}, function(){
+    browser.storage.local.set({'autoChck':chck}).then(function(){
     notifyMsg("auto pull is set to: "+chck);
     });
   }
@@ -115,7 +115,7 @@ function startListen(){
   //saving auto pull checkbox everytime it's checked
   document.getElementById('autoCChck').onclick=function(){
   var chck=this.checked;
-    chrome.storage.local.set({'autoCChck':chck}, function(){
+    browser.storage.local.set({'autoCChck':chck}).then(function(){
     notifyMsg("auto purge list is set to: "+chck);
     });
   }
@@ -123,7 +123,7 @@ function startListen(){
   //saving auto pull checkbox everytime it's checked
   document.getElementById('autoPgChck').onclick=function(){
   var chck=this.checked;
-    chrome.storage.local.set({'autoPgChck':chck}, function(){
+    browser.storage.local.set({'autoPgChck':chck}).then(function(){
     notifyMsg("auto pull on page load is set to: "+chck);
     });
   }
@@ -131,7 +131,7 @@ function startListen(){
   //saving auto pull checkbox everytime it's checked
   document.getElementById('XHRChck').onclick=function(){
   var chck=this.checked;
-    chrome.storage.local.set({'XHRChck':chck}, function(){
+    browser.storage.local.set({'XHRChck':chck}).then(function(){
     notifyMsg("Grab from XHR is set to: "+chck);
     });
   }
@@ -154,7 +154,7 @@ function startListen(){
     return 0;
     }
 
-    chrome.storage.local.set({'patt': inp},()=>{
+    browser.storage.local.set({'patt': inp}).then(()=>{
     notifyMsg("Pattern '"+inp+"' saved.");
     this.classList.remove("btnHL");
     });
@@ -169,7 +169,7 @@ function startListen(){
     }
 
     
-    chrome.storage.local.set({'XHRPatt': inp},()=>{
+    browser.storage.local.set({'XHRPatt': inp}).then(()=>{
    
     notifyMsg("XHR Pattern '"+inp+"' saved.");
     this.classList.remove("btnHL");
@@ -186,14 +186,14 @@ function startListen(){
 
   //opens about page
   document.getElementsByClassName("about")[0].onclick=function(){
-    chrome.tabs.create({url: 'https://b3spage.sourceforge.io/index.html?mewate'});
+    browser.tabs.create({url: 'https://b3spage.sourceforge.io/index.html?mewate'});
   }
 
   //clears the results list
   document.getElementById('clearBtn').onclick=function(){
-    chrome.storage.local.set({'list': ''}, ()=>{
+    browser.storage.local.set({'list': ''}).then(()=>{
     //document.getElementById('listTxtAr').value='';
-    chrome.runtime.sendMessage({bdgNm: ''});
+    browser.runtime.sendMessage({bdgNm: ''});
     notifyMsg('Results list cleared');
     });
   }
@@ -205,8 +205,8 @@ function startListen(){
       notifyMsg("List not saved. Not list to save.");
       return 0;
       }
-      chrome.storage.local.set({'list': inp},()=>{
-      chrome.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
+      browser.storage.local.set({'list': inp}).then(()=>{
+      browser.runtime.sendMessage({bdgNm: inp.trim().split(/\r\n|\r|\n/).length.toString()});
       notifyMsg("List saved.");
       this.classList.remove("btnHL");
       });
@@ -222,7 +222,7 @@ function startListen(){
 
   //because apparently storage is async and the messaging method doesn't stay open long enough to pass something back nor does respond late enough to get the update from storage
   //this makes the text area update when there's a new value
-  chrome.storage.onChanged.addListener(function(changes,namespace){
+  browser.storage.onChanged.addListener(function(changes,namespace){
     if(changes.hasOwnProperty('list') && changes.list.hasOwnProperty('newValue')){
     document.getElementById('listTxtAr').value=changes.list.newValue;
     }
@@ -230,18 +230,18 @@ function startListen(){
 
 //rn on popup (menu) page load.
   document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get( null ,(item) => {
+    browser.storage.local.get().then((item) => {
       if(item.hasOwnProperty('autoPgChck') && !item.autoPgChck){
         if(item.hasOwnProperty('autoCChck') && item.autoCChck){
-          chrome.storage.local.set({'list':''} ,() => {
-          chrome.runtime.sendMessage({bdgNm: ''});
+          browser.storage.local.set({'list':''}).then(() => {
+          browser.runtime.sendMessage({bdgNm: ''});
           notifyMsg("auto clear executed");
           });
         }
 
         if(item.hasOwnProperty('autoChck') && item.autoChck){
-          chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'}, function(){
+          browser.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            browser.tabs.sendMessage(tabs[0].id, {action: 'pullPatt'}, function(){
             notifyMsg("auto pull executed");
             });
           });
@@ -251,8 +251,8 @@ function startListen(){
   }); 
 
 
-chrome.tabs.query({active: true, currentWindow: true},(tabs) => {
+browser.tabs.query({active: true, currentWindow: true},(tabs) => {
   if(tabs[0].url.substr(0,6)!="chrome"){
-  chrome.tabs.executeScript({file: "/content_scripts/mewate.js"}, startListen);
+  browser.tabs.executeScript({file: "/content_scripts/mewate.js"}, startListen);
   }
 });

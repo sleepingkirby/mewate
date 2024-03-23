@@ -48,14 +48,14 @@
   function runOnMsg(request, sender, sendResponse){
     switch(request.action){
       case 'pullPatt':
-        chrome.storage.local.get(null, (item) => {
+        browser.storage.local.get().then((item) => {
         console.log('mewate: pull results with pattern '+item.patt);
         var lns=grepHTML(item.patt);
           if(lns && lns!=''){
           lns=item.list+lns;
-            chrome.storage.local.set({list:lns},() => { 
+            browser.storage.local.set({list:lns}).then(() => { 
             console.log('mewate: results found.');
-            chrome.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
+            browser.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
             sendResponse({'list':lns});
             });
           }
@@ -102,9 +102,9 @@
     var lns=grepHTML(item.patt);
       if(lns && lns!=''){
       lns=item.list+lns;
-        chrome.storage.local.set({list:lns},() => { 
+        browser.storage.local.set({list:lns}).then(() => { 
         console.log('mewate: auto pull found results');
-        chrome.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
+        browser.runtime.sendMessage({bdgNm: lns.trim().split(/\r\n|\r|\n/).length.toString()});
         });
       }
       else{
@@ -114,13 +114,13 @@
   }
 
     //auto pull 
-    chrome.storage.local.get( null ,(item) => {
+    browser.storage.local.get().then((item) => {
       if(item.hasOwnProperty('autoPgChck') && item.autoPgChck){
         if(item.hasOwnProperty('autoCChck') && item.autoCChck){
           item.list='';
-          chrome.storage.local.set({'list':""} ,() => {
+          browser.storage.local.set({'list':""}).then(() => {
           console.log("mewate: auto purging list");
-          chrome.runtime.sendMessage({bdgNm: ""});
+          browser.runtime.sendMessage({bdgNm: ""});
           autoPull(item);
           });
         }  
@@ -144,7 +144,7 @@
     });
 
 
-  chrome.runtime.onMessage.addListener(runOnMsg);
+  browser.runtime.onMessage.addListener(runOnMsg);
 })();
 
 

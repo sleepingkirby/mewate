@@ -1,20 +1,28 @@
+html{
+  min-width: 458px;
+  width:fit-content;
+  min-height: 320px;
+  height:308px;
+  
+}
 html, body {
-  width: auto;
-  height: 240px;
   font-family: "sans-serif";
   font-size: 11px;
   background-color: #101010;
   color: #808080;
-  min-width: 450px;
-  padding: 4px 4px 4px 4px;
+  padding: 4px 4px 4px 4px; 
   margin: 0px;
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
-  min-height: 250px;
+  min-height: 300px;
+  box-sizing:border-box;
 }
-
+body{
+  width:450px;
+  height: 300px;
+}
 a{
 text-decoration: none;
 color: #0852ff;

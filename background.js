@@ -1,17 +1,17 @@
 'use strict';
 
-chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+browser.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
 
 //listener for contentScript
-chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   if(msg.hasOwnProperty('bdgNm')) {
-    chrome.browserAction.setBadgeText({text: msg.bdgNm});
+    browser.browserAction.setBadgeText({text: msg.bdgNm});
   }
 });
 
 
-//  chrome.webRequest.onBeforeRequest.addListener(callback, filter, opt_extraInfoSpec);  
-      chrome.webRequest.onBeforeRequest.addListener(
+//  browser.webRequest.onBeforeRequest.addListener(callback, filter, opt_extraInfoSpec);  
+      browser.webRequest.onBeforeRequest.addListener(
         function(details) {
           /*so... according to google, prior to their documentation revamp, chrome.storage.local is synchronous and
           therefore, we don't have to worry about race conditions. That's a big fat lie.
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
           after this comment. This means that I'll have to figure/write my own task queue or task scheduler at some
           point. For now, it's fine. But, seriously, WTH?
           */
-          chrome.storage.local.get( null ,(item) => {
+          browser.storage.local.get().then((item) => {
             //check if should run
             if(item.hasOwnProperty('XHRChck') && item.XHRChck ){
               // check to make sure a pattern exists to grab
@@ -64,23 +64,35 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
               }
               //console.log("setting: "+lns);
             //send results to storage.
-            chrome.storage.local.set({'list': lns},(e)=>{console.log(details.url+": "+lns);});
-            chrome.browserAction.setBadgeText({text: lns.trim().split(/\r\n|\r|\n/).length.toString()});
+            browser.storage.local.set({'list': lns}).then((e)=>{console.log(details.url+": "+lns);});
+            browser.browserAction.setBadgeText({text: lns.trim().split(/\r\n|\r|\n/).length.toString()});
             }
           });
         },
         {urls: ["<all_urls>"]});
 
 
+//condition to enable or disable the browser action
+function browserActionOn(str){
+  if(str.match(/(http|https|file):\//)){
+  browser.browserAction.enable();
+  }
+  else{   
+  browser.browserAction.disable();
+  }
+} 
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {urlMatches: '(http|https|file):/+[a-z]*'},
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
+//enable or disable toolbar/browser action on new tab
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo)=>{
+  if(tabInfo.active){
+  browserActionOn(tabInfo.url);
+  }
 });
+  
+//enable or diable toolbar/browser action on tab switch
+browser.tabs.onActivated.addListener((tabInfo)=>{
+  browser.tabs.get(tabInfo.tabId).then((tab)=>{
+  browserActionOn(tab.url);
+  });
+}); 
 
